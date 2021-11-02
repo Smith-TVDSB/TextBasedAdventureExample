@@ -1,37 +1,40 @@
 import time
 import random
 
-def startingRoom (key):
+def startingRoom ():
 	print("You find yourself in a room with only one way forward, what do you do?")
 	command = input("Walk forward (w), walk back (s), walk left (a), or walk right(d)\n") #TODO: clean this up
 	if command.lower() == "w":
-		secondRoom(key)
+		secondRoom()
 	else:
 		print("You hit a wall, start over")
+		startingRoom()
 
 
-def secondRoom(key):
+def secondRoom():
 	print("You're in a hallway, you can walk forward or back")
-	if not (key) :
+	if not (haveKey) : #Bug, this will let us grab an infinite amount of keys
 		print("There is a key on the ground, you may pick it up (p)")
 	command = input("Walk forward (w), walk back (s), walk left (a), or walk right(d)\n").lower() #TODO: clean this up
 	if command== 'p':
-		haveKey = True
-		secondRoom(haveKey)
+		haveKey = True #picked up the key
+		#TODO remove key from ground
+		secondRoom()
 	elif command=='w':
-		cornerRoom(key)
+		cornerRoom()
 	elif command=='s':
-		startingRoom(key)
+		startingRoom()
 	else:
 		print("Invalid option, start over.")
 
-def cornerRoom (key):
+def cornerRoom ():
 	print("You reach the end of the hall, to your left (a), is a locked door")
 	command = input("Walk forward (w), walk back (s), walk left (a), or walk right(d)\n") #TODO: clean this up
-	if command.lower()=='a': ##TODO add check to see if there's a key
+	if command.lower()=='a' and haveKey: 
+		haveKey = False #used the key so it breaks
 		finalRoom()
 	elif command.lower()=='s':
-		secondRoom(key)
+		secondRoom()
 	else:
 		print("Invalid option, start over.")
 
@@ -58,5 +61,10 @@ def finalRoom ():
 	else:
 		print ("You tripped and fell only to wake from a horrible dream of being lost in a text based adventure")
 
+#DECLARE GLOBAL VARIABLES
+global haveKey
+#SET GLOBAL VALUES BEFORE GAME START
 haveKey = False
-startingRoom(haveKey)
+
+#GAME START
+startingRoom()
